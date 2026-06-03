@@ -1,6 +1,6 @@
-Architecture du projet
-stacknov
-a-infra/
+# Architecture du projet
+
+<a-infra/
 ├── terraform/
 │   ├── providers.tf
 │   ├── main.tf
@@ -14,14 +14,18 @@ a-infra/
 │   └── deploy.sh
 │
 ├── screens/
-│   ├── Terraform Output.png
-│   ├── docker.png
+│   ├── terraform_apply.png
+│   ├── docker_ps.png
 │   ├── ansible_playbook.png
 │   ├── stacknova_page.png
-│   └── Ansible.png
+│   └── deploy_script.png
 │
 ├── .gitignore
 └── README.md
+
+```**
+
+
 Prérequis
 Vérification des versions
 docker --version
@@ -44,9 +48,9 @@ pyyaml version = 6.0.2
 Technologies utilisées
 Technologie	Rôle
 Docker	Conteneurisation
-Terraform	Provisionnement de l'infrastructure
+*Terraform*	Provisionnement de l'infrastructure
 Ansible	Gestion de configuration
-Bash	Automatisation
+Bash Automatisation
 Git	Gestion de versions
 GitHub	Hébergement du code
 Provisionnement avec Terraform
@@ -181,4 +185,44 @@ même page web
 mêmes outputs Terraform
 
 L'environnement peut être reconstruit intégralement à tout moment.
-# stacknova-infra
+
+Questions théoriques
+Q1. Quelle est la différence entre Terraform et Ansible ? En quoi sont-ils complémentaires dans ce projet ?
+
+Terraform est un outil de provisionnement permettant de créer et gérer l'infrastructure à partir d'une description déclarative. Dans ce projet, il crée l'image Docker et le conteneur Nginx.
+
+Ansible est un outil de gestion de configuration permettant d'automatiser les modifications apportées à une machine ou à un conteneur existant. Dans ce projet, il personnalise le contenu du serveur web.
+
+Ces deux outils sont complémentaires : Terraform crée l'infrastructure tandis qu'Ansible applique la configuration nécessaire au fonctionnement attendu.
+
+Q2. À quoi sert le state file Terraform ? Quels risques pose sa mauvaise gestion en équipe ?
+
+Le fichier terraform.tfstate contient l'état réel des ressources gérées par Terraform.
+
+Il permet à Terraform de comparer l'infrastructure existante avec la configuration décrite dans les fichiers Terraform afin de déterminer les actions à réaliser.
+
+Une mauvaise gestion du state peut entraîner des conflits entre collaborateurs, des suppressions accidentelles ou des incohérences d'infrastructure. En environnement professionnel, il est recommandé d'utiliser un backend distant sécurisé permettant le verrouillage du state.
+
+Q3. Qu'est-ce que l'idempotence ? Donnez un exemple concret tiré de ce projet.
+
+L'idempotence est la capacité d'un outil à produire le même résultat lorsqu'une opération est exécutée plusieurs fois.
+
+Dans ce projet, l'exécution répétée de la commande terraform apply ne crée pas de nouveau conteneur si celui-ci existe déjà et correspond à la configuration définie.
+
+Cette propriété garantit la stabilité et la reproductibilité des déploiements.
+
+Q4. Quelle est la différence entre terraform apply et terraform apply -replace ? Dans quel cas utiliseriez-vous le second ?
+
+La commande terraform apply applique uniquement les modifications nécessaires pour atteindre l'état désiré.
+
+La commande terraform apply -replace force la destruction puis la recréation d'une ressource spécifique même si aucun changement n'est détecté dans la configuration.
+
+Cette option est particulièrement utile lorsqu'une ressource est corrompue ou nécessite une reconstruction complète.
+
+Q5. Pourquoi est-il déconseillé d'utiliser le tag latest en production ?
+
+Le tag latest ne référence pas une version précise d'une image Docker.
+
+Deux déploiements effectués à des dates différentes peuvent donc récupérer des versions différentes d'un même logiciel.
+
+Cette pratique nuit à la reproductibilité, complique les opérations de maintenance et augmente le risque d'introduire des régressions ou des vulnérabilités. Il est préférable d'utiliser une version explicitement définie afin de garantir un comportement stable et prévisible.
