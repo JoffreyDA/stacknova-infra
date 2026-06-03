@@ -1,6 +1,7 @@
 # Architecture du projet
 
-''''html
+````html
+
 
 ├── terraform/
 │   ├── providers.tf
@@ -24,7 +25,8 @@
 ├── .gitignore
 └── README.md
 
-''''
+````
+
 
 Terraform Provisionnement de l'infrastructure
 
