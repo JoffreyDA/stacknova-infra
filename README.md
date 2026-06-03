@@ -1,6 +1,6 @@
 # Architecture du projet
 
-''''text
+''''TXT
 
 ├── terraform/
 │   ├── providers.tf
