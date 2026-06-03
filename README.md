@@ -1,6 +1,5 @@
 # Architecture du projet
 
-<a-infra/
 ├── terraform/
 │   ├── providers.tf
 │   ├── main.tf
@@ -23,8 +22,7 @@
 ├── .gitignore
 └── README.md
 
-```**
-
+Terraform Provisionnement de l'infrastructure
 
 Prérequis
 Vérification des versions
@@ -46,13 +44,13 @@ python version = 3.13.5
 jinja version = 3.1.6
 pyyaml version = 6.0.2
 Technologies utilisées
-Technologie	Rôle
-Docker	Conteneurisation
-*Terraform*	Provisionnement de l'infrastructure
-Ansible	Gestion de configuration
+Technologie Rôle
+Docker Conteneurisation
+*Terraform* Provisionnement de l'infrastructure
+Ansible Gestion de configuration
 Bash Automatisation
-Git	Gestion de versions
-GitHub	Hébergement du code
+Git Gestion de versions
+GitHub Hébergement du code
 Provisionnement avec Terraform
 Objectif
 
@@ -96,10 +94,10 @@ terraform output
 
 Résultat :
 
-application_url = "http://localhost:8080"
+application_url = "<http://localhost:8080>"
 container_name = "stacknova-recette"
 exposed_port = 8080
-curl http://localhost:8080
+curl <http://localhost:8080>
 
 Résultat :
 
@@ -136,13 +134,18 @@ Vérification du résultat final
 Exécution
 ansible-playbook -i inventory.ini playbook.yml
 Vérification
-curl http://localhost:8080
+curl <http://localhost:8080>
 
 Résultat :
+
+````html
 
 <h1>StackNova</h1>
 <p>Environnement : recette</p>
 <p>Date de déploiement : ...</p>
+
+````
+
 Automatisation
 Script deploy.sh
 
