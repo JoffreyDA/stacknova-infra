@@ -1,0 +1,70 @@
+---
+- name: Configurer le conteneur de recette StackNova
+  hosts: recette
+  gather_facts: false
+
+  vars:
+    deployment_timestamp: "{{ lookup('pipe', 'date \"+%Y-%m-%d %H:%M:%S\"') }}"
+
+  tasks:
+    - name: Vérifier la configuration Nginx
+      raw: nginx -t 2>&1
+      register: nginx_status
+
+    - name: Afficher le statut Nginx
+      debug:
+        var: nginx_status.stdout
+
+    - name: Déployer la page HTML StackNova
+      raw: |
+        cat > /usr/share/nginx/html/index.html <<'EOF'
+        <!DOCTYPE html>
+        <html lang="fr">
+        <head>
+          <meta charset="UTF-8">
+          <title>StackNova - Recette</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 40px;
+              background: #f4f7fb;
+              color: #1f2937;
+            }
+            .card {
+              background: white;
+              padding: 30px;
+              border-radius: 12px;
+              box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+              max-width: 700px;
+            }
+            h1 {
+              color: #2563eb;
+            }
+            .badge {
+              display: inline-block;
+              padding: 6px 12px;
+              background: #dcfce7;
+              color: #166534;
+              border-radius: 999px;
+              font-weight: bold;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="card">
+            <h1>StackNova</h1>
+            <p class="badge">Environnement : recette</p>
+            <p>Cette page a été déployée automatiquement avec Terraform et Ansible.</p>
+            <p>Date et heure de déploiement : <strong>{{ deployment_timestamp }}</strong></p>
+          </div>
+        </body>
+        </html>
+        EOF
+
+    - name: Vérifier que Nginx répond
+      raw: curl -s http://localhost/
+      register: page_result
+
+    - name: Afficher un extrait de la page déployée
+      debug:
+        var: page_result.stdout
